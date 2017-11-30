@@ -3,15 +3,31 @@ import RPi.GPIO as GPIO
 import time
 import threading
 
+seq = [[1,0,0,0],
+	[1,1,0,0],
+	[0,1,0,0],
+	[0,1,1,0],
+	[0,0,1,0],
+	[0,0,1,1],
+	[0,0,0,1],
+	[1,0,0,1]]
+
+seqReverse = [[1,0,0,1],
+	[0,0,0,1],
+	[0,0,1,1],
+	[0,0,1,0],
+	[0,1,1,0],
+	[0,1,0,0],
+	[1,1,0,0],
+	[1,0,0,0]]
+
 def moveMotor(motor, steps):
 	if int(steps) < 0:
-		seq.reverse()
 		for i in range(-int(steps)):
 	  		for halfstep in range(8):
 	    			for pin in range(4):
-	      				GPIO.output(motor[pin], seq[halfstep][pin])
+	      				GPIO.output(motor[pin], seqReverse[halfstep][pin])
             				time.sleep(0.001)
-		seq.reverse()
 	else:
 		for i in range(int(steps)):
 		# SPIN #
@@ -35,15 +51,6 @@ if __name__ == '__main__':
 	for pin in ControlPinRight:
 		GPIO.setup(pin,GPIO.OUT)
 		GPIO.output(pin,0)
-
-	seq = [[1,0,0,0],
-		[1,1,0,0],
-		[0,1,0,0],
-		[0,1,1,0],
-		[0,0,1,0],
-		[0,0,1,1],
-		[0,0,0,1],
-		[1,0,0,1]]
 
 	nsteps_right = raw_input("How many steps on right motor ? :)  ")
 	nsteps_left = raw_input("How many steps on left motor ? :)  ")
