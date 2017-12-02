@@ -15,7 +15,7 @@ class StepMotor(object):
 	def __init__(self, name, controlPin = [], x=0, y=0, string_length=0):
 		# Set motor name (L for left, R for right) 
 		self.name = name
-		# Initialize Raspberry control pins
+		# Initialize Raspberry Pi control pins
 		self.controlPin = controlPin
 		for pin in self.controlPin:
 			GPIO.setup(pin,GPIO.OUT)
