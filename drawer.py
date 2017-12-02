@@ -7,9 +7,8 @@ class Drawer(object):
 		self.height = height
 		self.margin = margin
 		# Set motor of the drawing boad
-		self.motor_left = StepMotor('L', 0, 0)
-		self.motor_right = StepMotor('R', width, 0)
-		self.motor_left.on_change = self.motor_right.on_change = self.on_change
+		self.motor_left = StepMotor('L')
+		self.motor_right = StepMotor('R')
 		self.motor_left.step_size = self.motor_right.step_size = step_size
 		# self.handlers = []
 		# self.add_change_handler(self.update_pen)
