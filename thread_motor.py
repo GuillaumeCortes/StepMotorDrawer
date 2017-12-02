@@ -41,26 +41,30 @@ def moveMotor(motor, steps):
 
 if __name__ == '__main__':
 
+	filename = sys.argv[1]
+
 	GPIO.setmode(GPIO.BOARD)
 
 	ControlPinLeft = [8,16,18,22] # pins connected to motor 1 #
 	ControlPinRight = [11,13,15,21] # pins connected to motor 2 #
 
-	motorRight = StepMotor('R', ControlPinRight, 0, 0)
-	motorLeft = StepMotor('L', ControlPinLeft, 0, 0)
+	# motorRight = StepMotor('R', ControlPinRight, 0, 0)
+	# motorLeft = StepMotor('L', ControlPinLeft, 0, 0)
 
 	drawer = Drawer(100, 80, (10,10))
 	drawer.print_config();
+	drawer.read_commands(filename)
+	# drawer.draw(filename);
 
-	nsteps_right = raw_input("How many steps on right motor ? :)  ")
-	nsteps_left = raw_input("How many steps on left motor ? :)  ")
+	# nsteps_right = raw_input("How many steps on right motor ? :)  ")
+	# nsteps_left = raw_input("How many steps on left motor ? :)  ")
 
-	t_right = threading.Thread(target=moveMotor, args=(motorRight, nsteps_right,))
-	t_left = threading.Thread(target=moveMotor, args=(motorLeft, nsteps_left,))
-	t_right.start()
-	t_left.start()
-	t_right.join()
-	t_left.join()
+	# t_right = threading.Thread(target=moveMotor, args=(motorRight, nsteps_right,))
+	# t_left = threading.Thread(target=moveMotor, args=(motorLeft, nsteps_left,))
+	# t_right.start()
+	# t_left.start()
+	# t_right.join()
+	# t_left.join()
 
 	GPIO.cleanup()
 

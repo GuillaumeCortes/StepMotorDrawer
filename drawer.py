@@ -14,7 +14,9 @@ class Drawer(object):
 		# self.handlers = []
 		# self.add_change_handler(self.update_pen)
 		# self.max_segment = max_segment
-		# self.coords = []
+		self.coords = []
+		self.commands = []
+		self.pen_down = false
 
 	def print_config(self): # Print onfiguration of the drawing board
 		print "Width x Height: " + str(self.width) + " x " + str(self.height)
@@ -58,17 +60,17 @@ class Drawer(object):
 	# 	self.pen.x = x
 	# 	self.pen.y = y
 
-	# def pen_down(self):
-	# 	log('Set pen down and press enter')
-	# 	raw_input()
-	# 	self.pen.down = True
-	# 	write('PD')
+	def pen_down(self):
+		log('Set pen down and press enter')
+		raw_input()
+		self.pen_down = True
+		write('PD')
 
-	# def pen_up(self):
-	# 	log('Lift pen and press enter')
-	# 	raw_input()
-	# 	self.pen.down = False
-	# 	write('PU')
+	def pen_up(self):
+		log('Lift pen and press enter')
+		raw_input()
+		self.pen_down = False
+		write('PU')
 
 	# def on_change(self):
 	# 	for f in self.handlers:
@@ -77,20 +79,29 @@ class Drawer(object):
 	# def add_change_handler(self, f):
 	# 	self.handlers.append(f)
 
-	# def draw(self):
-	# 	self.pen.down = True
-	# 	for x, y in self.coords:
-	# 		b = XY(x, y)
-	# 		previous = XY(self.pen.x, self.pen.y)
-	# 		while int(distance(self.pen, b)) > self.max_segment:
-	# 			p = point_on_line(self.pen, b, self.max_segment)
-	# 			self.move_to(p.x, p.y)
-	# 			if self.pen.x == previous.x and self.pen.y == previous.y:
-	# 				log('Breaking out of loop')
-	# 				break
-	# 			previous = XY(self.pen.x, self.pen.y)
-	# 		self.move_to(x, y)
-	# 	self.pen.down = False
+	def draw(filename):
+		# Get commands from filename
+		self.read_commands(filename)
+		for x, y in self.coords:
+			b = XY(x, y)
+			previous = XY(self.pen.x, self.pen.y)
+			while int(distance(self.pen, b)) > self.max_segment:
+				p = point_on_line(self.pen, b, self.max_segment)
+				self.move_to(p.x, p.y)
+				if self.pen.x == previous.x and self.pen.y == previous.y:
+					log('Breaking out of loop')
+					break
+				previous = XY(self.pen.x, self.pen.y)
+			self.move_to(x, y)
+
+	def read_commands(self, filename):
+		# Open the commands file
+		f = open('filename', 'r')
+		# Read lines 2 by 2
+		for line in f:
+			nextline=f.next()
+			print line
+			print nextline
 
 	# def scale_image(self, coords):
 	# 	minx = min([p[0] for p in coords])
