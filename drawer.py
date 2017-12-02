@@ -15,7 +15,7 @@ class Drawer(object):
 		# self.max_segment = max_segment
 		self.coords = []
 		self.commands = []
-		self.pen_down = false
+		self.pen_down = False
 
 	def print_config(self): # Print onfiguration of the drawing board
 		print "Width x Height: " + str(self.width) + " x " + str(self.height)
@@ -95,12 +95,14 @@ class Drawer(object):
 
 	def read_commands(self, filename):
 		# Open the commands file
-		f = open('filename', 'r')
+		f = open(filename, 'r')
 		# Read lines 2 by 2
 		for line in f:
 			nextline=f.next()
+			print "OK"
 			print line
 			print nextline
+		f.close()
 
 	# def scale_image(self, coords):
 	# 	minx = min([p[0] for p in coords])
