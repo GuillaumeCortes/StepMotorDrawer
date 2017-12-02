@@ -24,18 +24,18 @@ seqReverse = [[1,0,0,1],
 def moveMotor(motor, steps):
 	if int(steps) < 0:
 		for i in range(-int(steps)):
-	  		for halfstep in range(8):
-	    		for pin in range(4):
-	      			GPIO.output(motor.controlPin[pin], seqReverse[halfstep][pin])
-            		time.sleep(0.0005)
+		for halfstep in range(8):
+			for pin in range(4):
+					GPIO.output(motor.controlPin[pin], seqReverse[halfstep][pin])
+					time.sleep(0.0005)
 	else:
 		for i in range(int(steps)):
 		# SPIN #
-	  		for halfstep in range(8):
+			for halfstep in range(8):
 			# 8 steps for one revolution of the core gear #
-	    		for pin in range(4):
-	      			GPIO.output(motor.controlPin[pin], seq[halfstep][pin])
-	    			time.sleep(0.0005)
+				for pin in range(4):
+					GPIO.output(motor.controlPin[pin], seq[halfstep][pin])
+					time.sleep(0.0005)
 
 if __name__ == '__main__':
 
