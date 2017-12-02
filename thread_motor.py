@@ -1,7 +1,9 @@
 import time
 import threading
+import RPi.GPIO as GPIO
 
 from drawer import Drawer
+from step_motor import StepMotor
 
 seq = [[1,0,0,0],
 	[1,1,0,0],
@@ -44,7 +46,7 @@ if __name__ == '__main__':
 	ControlPinLeft = [8,16,18,22] # pins connected to motor 1 #
 	ControlPinRight = [11,13,15,21] # pins connected to motor 2 #
 
-	motorRight = StepMotor('R', ControlPinRight, width, 0)
+	motorRight = StepMotor('R', ControlPinRight, 0, 0)
 	motorLeft = StepMotor('L', ControlPinLeft, 0, 0)
 
 	nsteps_right = raw_input("How many steps on right motor ? :)  ")
