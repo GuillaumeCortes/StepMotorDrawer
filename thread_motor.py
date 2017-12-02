@@ -49,6 +49,9 @@ if __name__ == '__main__':
 	motorRight = StepMotor('R', ControlPinRight, 0, 0)
 	motorLeft = StepMotor('L', ControlPinLeft, 0, 0)
 
+	drawer = Drawer(100, 80, (10,10))
+	drawer.print_config();
+
 	nsteps_right = raw_input("How many steps on right motor ? :)  ")
 	nsteps_left = raw_input("How many steps on left motor ? :)  ")
 
