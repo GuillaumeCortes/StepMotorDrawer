@@ -1,3 +1,4 @@
+import threading
 from step_motor import StepMotor
 
 class Drawer(object):
@@ -93,7 +94,7 @@ class Drawer(object):
 	# 			previous = XY(self.pen.x, self.pen.y)
 	# 		self.move_to(x, y)
 
-	def draw_from_commands(commands_filename):
+	def draw_from_commands(self, commands_filename):
 		# Get commands from filename
 		self.read_commands(commands_filename)
 		for x, y in self.commands:

@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-
+import time
 import sys
 from math import sqrt, ceil
 
@@ -48,7 +48,7 @@ class StepMotor(object):
 				for halfstep in range(8):
 					for pin in range(4):
 						GPIO.output(self.controlPin[pin], seqReverse[halfstep][pin])
-						time.sleep(0.0005)
+						time.sleep(0.0001)
 		else:
 			for i in range(int(steps)):
 			# SPIN #
@@ -56,7 +56,7 @@ class StepMotor(object):
 				# 8 steps for one revolution of the core gear #
 					for pin in range(4):
 						GPIO.output(self.controlPin[pin], seq[halfstep][pin])
-						time.sleep(0.0005)
+						time.sleep(0.0001)
 
 	# def step_forward(self):
 	# 	self.string_length += self.step_size
