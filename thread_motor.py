@@ -1,44 +1,10 @@
 import sys
 import time
 import threading
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 
 from drawer import Drawer
 from step_motor import StepMotor
-
-seq = [[1,0,0,0],
-	[1,1,0,0],
-	[0,1,0,0],
-	[0,1,1,0],
-	[0,0,1,0],
-	[0,0,1,1],
-	[0,0,0,1],
-	[1,0,0,1]]
-
-seqReverse = [[1,0,0,1],
-	[0,0,0,1],
-	[0,0,1,1],
-	[0,0,1,0],
-	[0,1,1,0],
-	[0,1,0,0],
-	[1,1,0,0],
-	[1,0,0,0]]
-
-def moveMotor(motor, steps):
-	if int(steps) < 0:
-		for i in range(-int(steps)):
-			for halfstep in range(8):
-				for pin in range(4):
-					GPIO.output(motor.controlPin[pin], seqReverse[halfstep][pin])
-					time.sleep(0.0005)
-	else:
-		for i in range(int(steps)):
-		# SPIN #
-			for halfstep in range(8):
-			# 8 steps for one revolution of the core gear #
-				for pin in range(4):
-					GPIO.output(motor.controlPin[pin], seq[halfstep][pin])
-					time.sleep(0.0005)
 
 if __name__ == '__main__':
 
@@ -46,26 +12,24 @@ if __name__ == '__main__':
 
 	GPIO.setmode(GPIO.BOARD)
 
-	ControlPinLeft = [8,16,18,22] # pins connected to motor 1 #
-	ControlPinRight = [11,13,15,21] # pins connected to motor 2 #
+	motor_left = StepMotor('L', [8,16,18,22])
+	motor_right = StepMotor('R', [11,13,15,21])
 
-	# motorRight = StepMotor('R', ControlPinRight, 0, 0)
-	# motorLeft = StepMotor('L', ControlPinLeft, 0, 0)
+	x = raw_input("How many steps on right motor ? :)  ")
+	y = raw_input("How many steps on left motor ? :)  ")
+	# move Right Motor for x steps
+	t_right = threading.Thread(target=motor_right.move, args=(x,))
+	t_right.start()
+	# move Left Motor for y steps
+	t_left = threading.Thread(target=motor_left.move, args=(y,))
+	t_left.start()
+	# Wait for motors to finish their movements
+	t_right.join()
+	t_left.join()
 
-	drawer = Drawer(100, 80, (10,10))
-	drawer.print_config();
-	drawer.read_commands(filename)
+	# drawer = Drawer(100, 80, (10,10))
+	# drawer.print_config();
 	# drawer.draw(filename);
-
-	# nsteps_right = raw_input("How many steps on right motor ? :)  ")
-	# nsteps_left = raw_input("How many steps on left motor ? :)  ")
-
-	# t_right = threading.Thread(target=moveMotor, args=(motorRight, nsteps_right,))
-	# t_left = threading.Thread(target=moveMotor, args=(motorLeft, nsteps_left,))
-	# t_right.start()
-	# t_left.start()
-	# t_right.join()
-	# t_left.join()
 
 	GPIO.cleanup()
 

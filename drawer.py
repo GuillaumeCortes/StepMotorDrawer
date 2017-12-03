@@ -7,8 +7,8 @@ class Drawer(object):
 		self.height = height
 		self.margin = margin
 		# Set motor of the drawing boad
-		self.motor_left = StepMotor('L')
-		self.motor_right = StepMotor('R')
+		self.motor_left = StepMotor('L', [8,16,18,22])
+		self.motor_right = StepMotor('R', [11,13,15,21])
 		self.motor_left.step_size = self.motor_right.step_size = step_size
 		# self.handlers = []
 		# self.add_change_handler(self.update_pen)
@@ -78,30 +78,51 @@ class Drawer(object):
 	# def add_change_handler(self, f):
 	# 	self.handlers.append(f)
 
-	def draw(filename):
+	# def draw(filename):
+	# 	# Get commands from filename
+	# 	self.read_commands(filename)
+	# 	for x, y in self.coords:
+	# 		b = XY(x, y)
+	# 		previous = XY(self.pen.x, self.pen.y)
+	# 		while int(distance(self.pen, b)) > self.max_segment:
+	# 			p = point_on_line(self.pen, b, self.max_segment)
+	# 			self.move_to(p.x, p.y)
+	# 			if self.pen.x == previous.x and self.pen.y == previous.y:
+	# 				log('Breaking out of loop')
+	# 				break
+	# 			previous = XY(self.pen.x, self.pen.y)
+	# 		self.move_to(x, y)
+
+	def draw_from_commands(commands_filename):
 		# Get commands from filename
-		self.read_commands(filename)
-		for x, y in self.coords:
-			b = XY(x, y)
-			previous = XY(self.pen.x, self.pen.y)
-			while int(distance(self.pen, b)) > self.max_segment:
-				p = point_on_line(self.pen, b, self.max_segment)
-				self.move_to(p.x, p.y)
-				if self.pen.x == previous.x and self.pen.y == previous.y:
-					log('Breaking out of loop')
-					break
-				previous = XY(self.pen.x, self.pen.y)
-			self.move_to(x, y)
+		self.read_commands(commands_filename)
+		for x, y in self.commands:
+			# move Right Motor for x steps
+			t_right = threading.Thread(target=self.motor_right.move, args=(x,))
+			t_right.start()
+			# move Left Motor for y steps
+			t_left = threading.Thread(target=self.motor_left.move, args=(y,))
+			t_left.start()
+			# Wait for motors to finish their movements
+			t_right.join()
+			t_left.join()
 
 	def read_commands(self, filename):
 		# Open the commands file
 		f = open(filename, 'r')
 		# Read lines 2 by 2
 		for line in f:
-			nextline=f.next()
-			print "OK"
-			print line
-			print nextline
+			nextline = f.next()
+			first_motor_name = line[:1]
+			first_motor_steps = line[1:]
+			second_motor_name = nextline[:1]
+			second_motor_steps = nextline[1:]
+			# Fill the commands list
+			if first_motor_name == 'R':
+				self.commands.append((int(first_motor_steps), int(second_motor_steps)))
+			else:
+				self.commands.append((int(second_motor_steps), int(first_motor_steps)))
+		print self.commands
 		f.close()
 
 	# def scale_image(self, coords):

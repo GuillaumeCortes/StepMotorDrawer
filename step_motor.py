@@ -3,6 +3,23 @@ import RPi.GPIO as GPIO
 import sys
 from math import sqrt, ceil
 
+seq = [[1,0,0,0],
+	[1,1,0,0],
+	[0,1,0,0],
+	[0,1,1,0],
+	[0,0,1,0],
+	[0,0,1,1],
+	[0,0,0,1],
+	[1,0,0,1]]
+
+seqReverse = [[1,0,0,1],
+	[0,0,0,1],
+	[0,0,1,1],
+	[0,0,1,0],
+	[0,1,1,0],
+	[0,1,0,0],
+	[1,1,0,0],
+	[1,0,0,0]]
 
 class StepMotor(object):
 	controlPin = []
@@ -24,6 +41,22 @@ class StepMotor(object):
 		self.x = x
 		self.y = y
 		self.string_length = string_length
+
+	def move(self, steps):
+		if int(steps) < 0:
+			for i in range(-int(steps)):
+				for halfstep in range(8):
+					for pin in range(4):
+						GPIO.output(self.controlPin[pin], seqReverse[halfstep][pin])
+						time.sleep(0.0005)
+		else:
+			for i in range(int(steps)):
+			# SPIN #
+				for halfstep in range(8):
+				# 8 steps for one revolution of the core gear #
+					for pin in range(4):
+						GPIO.output(self.controlPin[pin], seq[halfstep][pin])
+						time.sleep(0.0005)
 
 	# def step_forward(self):
 	# 	self.string_length += self.step_size
